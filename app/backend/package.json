@@ -1,0 +1,12 @@
+{
+  "name": "zero-trust-api",
+  "version": "1.0.0",
+  "description": "Demo API for AKS Secure DevSecOps Zero Trust Lab",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
