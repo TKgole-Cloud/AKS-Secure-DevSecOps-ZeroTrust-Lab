@@ -1,0 +1,41 @@
+name: Build and Push Image
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+env:
+  REGISTRY: zembeakszerotrust01.azurecr.io
+  IMAGE_NAME: zero-trust-api
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest 
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Login to ACR
+        run: az acr login --name zembeakszerotrust01
+
+      - name: Build Docker image
+        run: |
+          docker build \
+            -t $REGISTRY/$IMAGE_NAME:${{ github.sha }} \
+            -t $REGISTRY/$IMAGE_NAME:latest \
+            ./app/backend
+
+      - name: Push Docker image
+        run: |
+          docker push $REGISTRY/$IMAGE_NAME:${{ github.sha }}
+          docker push $REGISTRY/$IMAGE_NAME:latest
